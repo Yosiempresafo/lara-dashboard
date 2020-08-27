@@ -8,7 +8,7 @@ enum Query {
       }
     }
   `,
-  Metrics= `
+  allMetrics = `
     query {
       getMetrics
     }

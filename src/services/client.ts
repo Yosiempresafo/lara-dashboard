@@ -1,10 +1,9 @@
-import { createClient } from 'urql';
 import { Client, defaultExchanges, subscriptionExchange } from 'urql';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 const endPoint = "react.eogresources.com/graphql"
 
-const clientSuscription = new Client({
+const client = new Client({
   url: `https://${endPoint}`,
   exchanges: [
     ...defaultExchanges,
@@ -16,8 +15,4 @@ const clientSuscription = new Client({
   ],
 });
 
-const client = createClient({
-  url: `https://${endPoint}`,
-});
-
-export {client, clientSuscription};
+export default client;

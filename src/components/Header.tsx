@@ -14,12 +14,11 @@ const useStyles = makeStyles({
 export default () => {
   const classes = useStyles();
 
-  const name = "Lara's";
   return (
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" color="inherit" className={classes.grow}>
-          {name} Dashboard
+          {"Dashboard"}
         </Typography>
         <Weather />
       </Toolbar>

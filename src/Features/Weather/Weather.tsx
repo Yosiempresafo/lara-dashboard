@@ -6,7 +6,7 @@ import { useGeolocation } from 'react-use';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Chip from '../../components/Chip';
 import { IState } from '../../store';
-import { client } from '../../services/clients'
+import client from '../../services/client'
 import Query from '../../services/query';
 
 const query = Query.Weather;
@@ -49,7 +49,7 @@ const Weather = () => {
 
   if (fetching) return <LinearProgress />;
 
-  return <Chip label={`Weather in ${locationName}: ${description} and ${temperatureinFahrenheit}°`} />;
+  return <Chip label={`Weather in ${locationName}: ${description} and ${temperatureinFahrenheit}°`}/>;
 };
 
 export default () => {
