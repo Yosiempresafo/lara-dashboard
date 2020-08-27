@@ -6,7 +6,7 @@ import { useGeolocation } from 'react-use';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Chip from '../../components/Chip';
 import { IState } from '../../store';
-import client from '../../services/client'
+import { client } from '../../services/clients'
 import Query from '../../services/query';
 
 const query = Query.Weather;
