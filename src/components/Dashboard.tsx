@@ -39,8 +39,8 @@ const Dashboard = () => {
         className="basic-multi-select"
         classNamePrefix="select"
       />
-      <Metrics metrics={selectedOption} />
-      <Historical metrics={selectedOption} initTime={initTime} />
+      <Metrics selectedOption={selectedOption} />
+      <Historical selectedOption={selectedOption} initTime={initTime} />
     </Container>
   );
 };

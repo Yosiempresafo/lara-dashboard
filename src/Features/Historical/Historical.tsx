@@ -2,32 +2,49 @@ import React, { useEffect } from 'react';
 import { useQuery } from 'urql';
 import Query from '../../services/query';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { actions } from './reducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { IState } from '../../store';
 
 const query = Query.Historical;
 //const after = Date.now() - (30 * 60000);
 
-const Historical = ({metrics = [], initTime = Date.now()}) => {
+const getMeasurements = (state: IState) => {
+  return state.measurements;
+};
+
+const Historical = ({selectedOption = [], initTime = Date.now()}) => {
+  const dispatch = useDispatch();
+  const measurements:any = useSelector(getMeasurements);
+
   const [result] = useQuery({
     query,
     variables: {
-      input: metrics.map((metric:any) => ({metricName: metric.value, after: initTime})),
+      input: selectedOption ? selectedOption.map((metric:any) => ({metricName: metric.value, after: initTime})) : [],
     },
   });
-
   const { fetching, data, error } = result;
+
   useEffect(() => {
     if (error) {
-      console.log(error)
+      dispatch(actions.historicalApiErrorReceived({ error: error.message }));
       return;
     }
     if (!data) return;
-      console.log(data)
-  }, [data, error]);
-
+    const { getMultipleMeasurements } = data;
+    dispatch(actions.historicalDataRecevied(getMultipleMeasurements));
+  }, [dispatch, data, error]);
   //if (fetching) return <LinearProgress />;
-
+  
   return (
-    <h1>Historical Data</h1>
+    <div>
+      <h1>Historical Data</h1>
+      {selectedOption && selectedOption.map((measurement:any) => {
+        if (measurement.value in measurements) {
+          return <h3 key={measurements[measurement.value].name}>{measurements[measurement.value].name}</h3>
+        }
+      })}
+    </div>
   );
 };
 

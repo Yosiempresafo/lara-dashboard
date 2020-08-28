@@ -19,7 +19,6 @@ enum Query {
       {
         metric
         measurements{
-          metric
           at
           value
           unit
