@@ -4,7 +4,7 @@ import { actions as HistoricalActions, ApiErrorAction } from './reducer';
 import { PayloadAction } from 'redux-starter-kit';
 
 function* apiErrorReceived(action: PayloadAction<ApiErrorAction>) {
-  yield call(toast.error, `Error hitorical: ${action.payload.error}`);
+  yield call(toast.error, `Error historical: ${action.payload.error}`);
 }
 
 export default function* watchApiError() {

@@ -1,9 +1,5 @@
 import { createSlice, PayloadAction } from 'redux-starter-kit';
 
-//export type HistoricalData = {
-//  measurements: [],
-//};
-
 export type ApiErrorAction = {
   error: string;
 };
@@ -29,10 +25,7 @@ const slice = createSlice({
         const lastMeasurement = measurement.measurements[measurement.measurements.length - 1];
         state[measurement.metric] = {
           name: measurement.metric, 
-          //columns: ["time", "value", "unit"], 
-          //last: {value: formatValue(lastMeasurement.value), at: lastMeasurement.at, unit: lastMeasurement.unit},
           last: {value: formatValue(lastMeasurement.value), at: lastMeasurement.at},
-          //points: measurement.measurements.map((point:any) => [point.at, point.value, point.unit])
           x: measurement.measurements.map((point:any) => new Date(point.at)),
           y: measurement.measurements.map((point:any) => point.value), 
           unit: lastMeasurement.unit === "F" ? "°F" : lastMeasurement.unit
@@ -44,7 +37,6 @@ const slice = createSlice({
       const { metric, value, at, unit } = action.payload;
       if (state[metric]) {
         state[metric].last = { value: formatValue(value), at, unit }
-        //state[metric].points.push([at, value, unit])
         state[metric].x.push(new Date(at))
         state[metric].y.push(value)
       }

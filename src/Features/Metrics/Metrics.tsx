@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Query from '../../services/query';
 //import LinearProgress from '@material-ui/core/LinearProgress';
 import { useSubscription, SubscriptionHandler } from 'urql';
@@ -7,14 +7,12 @@ import Grid from '@material-ui/core/Grid';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../Historical/reducer';
 import { IState } from '../../store';
-import LinearProgress from '@material-ui/core/LinearProgress';
+//import LinearProgress from '@material-ui/core/LinearProgress';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const query = Query.Tick;
@@ -59,7 +57,7 @@ const Metric = ({selectedOption = []}) => {
       dispatch(actions.lastDataRecevied(result.data));
     }
   }, [dispatch, result]);
-  const { fetching, data, error } = result;
+  //const { fetching, data, error } = result;
 
   //if (!result.data) {
   //  return (<div><LinearProgress /></div>);

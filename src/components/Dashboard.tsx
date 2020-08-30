@@ -6,7 +6,7 @@ import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Metrics from '../Features/Metrics/Metrics';
 import Historical from '../Features/Historical/Historical';
-import Select from "react-select";
+import Select from 'react-select';
 
 const query = Query.allMetrics;
 const initTime = Date.now() - (30 * 60000);
@@ -25,7 +25,7 @@ const Dashboard = () => {
       return;
     }
     if (!data) return;
-    setOptions(data.getMetrics.map((metric:any) => ({value: metric, label: metric})));
+    setOptions(data.getMetrics.map((metric:any) => ({value: metric, label: metric, unit: metric.includes('Temp')?'°F':metric.includes('Pressure')?'PSI':'%'})));
   }, [data, error]);
 
   if (fetching) return <LinearProgress />;
@@ -41,7 +41,7 @@ const Dashboard = () => {
           classNamePrefix="select"
         />
         <Metrics selectedOption={selectedOption} />
-        <Historical selectedOption={selectedOption} initTime={initTime} />
+        <Historical selectedOption={selectedOption} initTime={initTime} options={options}/>
     </Container>
   );
 };

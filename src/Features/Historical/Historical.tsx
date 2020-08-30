@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'urql';
 import Query from '../../services/query';
-import LinearProgress from '@material-ui/core/LinearProgress';
+//import LinearProgress from '@material-ui/core/LinearProgress';
 import { actions } from './reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '../../store';
@@ -14,68 +14,74 @@ const getMeasurements = (state: IState) => {
   return state.measurements;
 };
 
-const layout:any = {
-  //title: 'multiple y-axes example',
+//const layout:any = {
+//  //datarevision: 0,
+//  width: 1200,
+//  height: 800,
+//  xaxis: {
+//    tickformat: '%H:%M:%S',
+//    domain: [0.3, 1],
+//    showgrid: false
+//  },
+//  yaxis: {
+//    title: 'PSI',
+//    titlefont: {color: '#1f77b4'},
+//    tickfont: {color: '#1f77b4'},
+//    showgrid: false,
+//    linecolor: '#636363'
+//  },
+//  yaxis2: {
+//    title: '°F',
+//    titlefont: {color: '#ff7f0e'},
+//    tickfont: {color: '#ff7f0e'},
+//    showgrid: false,
+//    anchor: 'free',
+//    overlaying: 'y',
+//    side: 'left',
+//    position: 0.15
+//  },
+//  yaxis3: {
+//    title: '%',
+//    titlefont: {color: '#d62728'},
+//    tickfont: {color: '#d62728'},
+//    showgrid: true,
+//    anchor: 'free',
+//    overlaying: 'y',
+//    side: 'left',
+//    position: 0.23
+//  }
+//}
+
+const layout2:any = {
+  //datarevision: 0,
   width: 1200,
   height: 800,
   xaxis: {
-    tickformat: '%H:%M:%S',
-    domain: [0, 1],
+    domain: [0.06, 1],
     showgrid: false
-  },
-  yaxis: {
-    title: 'yaxis title',
-    titlefont: {color: '#1f77b4'},
-    tickfont: {color: '#1f77b4'}
-  },
-  yaxis2: {
-    title: '°F',
-    titlefont: {color: '#ff7f0e'},
-    tickfont: {color: '#ff7f0e'},
-    anchor: 'free',
-    overlaying: 'y',
-    side: 'left',
-    position: 0,
-    linecolor: '#636363'
   }
 }
 
-let hola  = [
-  {at: new Date(1598655510534), value: 30.58,  kind: "F"},
-  {at: new Date(1598655511534), value: 35.58,  kind: "F"},
-  {at: new Date(1598655512534), value: 10.58,  kind: "F"},
-]
+const Grafico = (props:any) => {
+  return(<Plot
+    data={props.data}
+    layout={props.ly}
+  />)
+}
 
-const trace1 = {
-x: hola.map(x=>x.at),
-y: hola.map(x=>x.value),
-name: 'yaxis1 data',
-type: 'scatter'
-};
-
-const trace2 = {
-x: hola.map(x=>x.at),
-y: hola.map(x=>x.value + 100),
-name: 'yaxis2 data',
-yaxis: 'y2',
-type: 'scatter'
-};
-
-
-const data1:any = [trace1, trace2];
-
-const Historical = ({selectedOption = [], initTime = Date.now()}) => {
-  const dispatch = useDispatch();
+const Historical = ({selectedOption = [], initTime = Date.now(), options = []}) => {
   const measurements:any = useSelector(getMeasurements);
-
-    const [result] = useQuery({
-      query,
-      variables: {
-        input: selectedOption ? selectedOption.map((metric:any) => ({metricName: metric.value, after: initTime})) : [],
-      },
-    });
-
-    const { data, error } = result;
+  const dispatch = useDispatch();
+  const [result] = useQuery({
+    query,
+    variables: {
+      //input: selectedOption ? selectedOption.map((metric:any) => ({metricName: metric.value, after: initTime})) : [],
+      input: options ? options.map((metric:any) => ({metricName: metric.value, after: initTime})) : [],
+    },
+  });
+  const { data, error } = result;
+  const [layouto, setLayouto] = useState({});
+  const [units, setUnits] = useState([]);
 
   useEffect(() => {
     if (error) {
@@ -86,23 +92,89 @@ const Historical = ({selectedOption = [], initTime = Date.now()}) => {
     const { getMultipleMeasurements } = data;
     dispatch(actions.historicalDataRecevied(getMultipleMeasurements));
   }, [dispatch, data, error]);
-  
-  const graph:any[] = selectedOption ? selectedOption.map((measurement:any) => {
-    if (measurement.value in measurements) {
-      const plot = measurements[measurement.value];
 
-      //return <h3 key={measurements[measurement.value].name}>{measurements[measurement.value].name}</h3>
-      return {x: plot.x, y: plot.y, yaxis: 'y2', type: 'scatter', name: `${measurement.value} ${plot.unit}`}
+  useEffect(() => {
+    const units_ = selectedOption ? selectedOption.reduce((res:any, measurement:any) => {
+        if(!res.includes(measurement.unit)){
+          res.push(measurement.unit)
+        }
+      return res;
+    }, []):[];
+
+    setUnits(units_);
+  }, [selectedOption]);
+
+  useEffect(() => {
+    let layoutType = units.length; 
+    let yaxis = {
+      title: units[0],
+      linecolor: '#636363',
+      showgrid: false,
+      rangemode: 'tozero'
     }
-  }): [];
+    let yaxis2 = {
+      title: units[1],
+      linecolor: '#636363',
+      showgrid: false,
+      anchor: 'free',
+      overlaying: 'y',
+      side: 'left',
+      position: 0,
+      rangemode: 'tozero'
+    }
+    let yaxis3 = {
+      title: units[2],
+      linecolor: '#636363',
+      showgrid: false,
+      anchor: 'x',
+      overlaying: 'y',
+      side: 'right',
+      rangemode: 'tozero'
+    }
+    if(layoutType>=1){
+      setLayouto({...layout2, yaxis})
+    }else if(layoutType>=2){
+      setLayouto({...layout2, yaxis, yaxis2})
+    }else if(layoutType>=3){
+      setLayouto({...layout2, yaxis, yaxis2, yaxis3})
+    }
+  }, [units]);
+
+  const chooseYaxis = (unit:string) => {
+    let layoutType = units.length; 
+    if(layoutType>=1){
+      return 'y1'
+    }else if(layoutType>=2){
+      if(units[0] === unit){
+        return 'y1'
+      }else {
+        return 'y2'
+      }
+    }else if(layoutType>=3){
+      if(units[0] === unit){
+        return 'y1'
+      }else if (units[1] === unit){
+        return 'y2'
+      }else{
+        return 'y3'
+      }
+    }
+  }
 
   return (
     <div>
-      {graph.length>0&&
-        <Plot
-          data={graph}
-          layout={ layout }
-        />
+      {selectedOption&&
+        selectedOption.length>0&&
+        <Grafico data={selectedOption.map((measurement:any) => {
+          return (measurement.value in measurements) ?
+          { x: measurements[measurement.value].x, 
+            y: measurements[measurement.value].y, 
+            //yaxis: measurement.unit === 'PSI' ? 'y1' : 'y2',
+            yaxis: chooseYaxis(measurements[measurement.value].unit),
+            type: 'scatter', 
+            name: `${measurement.value} ${measurements[measurement.value].unit}`
+          } : {}
+        })} ly={layouto}/>
       }  
     </div>
   );
