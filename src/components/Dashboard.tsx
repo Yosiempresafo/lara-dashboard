@@ -14,6 +14,7 @@ const initTime = Date.now() - (30 * 60000);
 const Dashboard = () => {
   const [selectedOption, setSelectedOption]:any[] = useState([]);
   const [options, setOptions] = useState([]);
+
   const [result] = useQuery({
     query
   });
@@ -30,17 +31,17 @@ const Dashboard = () => {
   if (fetching) return <LinearProgress />;
 
   return (
-    <Container>
-      <Select
-        defaultValue={selectedOption}
-        onChange={setSelectedOption}
-        isMulti
-        options={options}
-        className="basic-multi-select"
-        classNamePrefix="select"
-      />
-      <Metrics selectedOption={selectedOption} />
-      <Historical selectedOption={selectedOption} initTime={initTime} />
+    <Container maxWidth="xl">
+        <Select
+          defaultValue={selectedOption}
+          onChange={setSelectedOption}
+          isMulti
+          options={options}
+          className="basic-multi-select"
+          classNamePrefix="select"
+        />
+        <Metrics selectedOption={selectedOption} />
+        <Historical selectedOption={selectedOption} initTime={initTime} />
     </Container>
   );
 };

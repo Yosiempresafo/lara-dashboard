@@ -19,7 +19,7 @@ const theme = createMuiTheme({
       main: 'rgb(197,208,222)',
     },
     background: {
-      default: 'rgb(226,231,238)',
+      default: '#F6F6F6',
     },
   },
 });
@@ -29,7 +29,7 @@ const App = () => (
     <CssBaseline />
     <Provider store={store}>
       <Wrapper>
-        <Header />
+        <Header />       
         <br />
         <Dashboard />
         <ToastContainer />

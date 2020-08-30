@@ -20,12 +20,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 const query = Query.Tick;
 const useStyles = makeStyles({
   root: {
-    minWidth: 150,
+    minWidth: 250,
     maxWidth: 300,
     margin: 10
   },
   title: {
-    fontSize: 20,
+    fontWeight: "bold",
+    fontSize: 20
   },
   value:{
     fontSize: 40,
@@ -60,13 +61,12 @@ const Metric = ({selectedOption = []}) => {
   }, [dispatch, result]);
   const { fetching, data, error } = result;
 
-  if (!result.data) {
-    return (<div><LinearProgress /></div>);
-  }
+  //if (!result.data) {
+  //  return (<div><LinearProgress /></div>);
+  //}
 
   return (
     <div>
-      <h1>Last-tick</h1>
       <Grid
         container
         direction="row"
@@ -74,7 +74,7 @@ const Metric = ({selectedOption = []}) => {
         alignItems="center"
       >
         {selectedOption && selectedOption.map((measurement: any) => (
-          <Card className={classes.root} key={measurement.value}>
+          <Card elevation={0} className={classes.root} key={measurement.value}>
             <CardContent>
               <Typography className={classes.title} gutterBottom>
                 {measurement.value}
@@ -82,7 +82,7 @@ const Metric = ({selectedOption = []}) => {
               <Typography className={classes.value} component="h3">
                 {
                   measurement.value in measurements ?
-                  measurements[measurement.value].last.value + "  " + measurements[measurement.value].last.unit :
+                  measurements[measurement.value].last.value + "" + measurements[measurement.value].unit :
                   <CircularProgress/>
                 }
               </Typography>
