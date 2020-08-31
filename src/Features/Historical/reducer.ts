@@ -12,7 +12,6 @@ export type LastData = {
 };
 
 const formatValue = (value: number) => (Math.round(value * 100) / 100).toFixed(2);
-
 const initialState = {};
 
 const slice = createSlice({
@@ -32,7 +31,7 @@ const slice = createSlice({
         };
       }
     },
-    historicalApiErrorReceived: (state, action: PayloadAction<ApiErrorAction>) => state,
+    apiErrorReceived: (state, action: PayloadAction<ApiErrorAction>) => state,
     lastDataRecevied: (state:any, action: PayloadAction<LastData>) => {
       const { metric, value, at, unit } = action.payload;
       if (state[metric]) {

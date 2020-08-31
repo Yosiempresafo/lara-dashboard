@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from 'urql';
 import Query from '../../services/query';
-//import LinearProgress from '@material-ui/core/LinearProgress';
 import { actions } from './reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '../../store';
 import Plot from 'react-plotly.js';
 import Card from '@material-ui/core/Card';
+import { makeStyles } from '@material-ui/core/styles';
 
 const query = Query.Historical;
+const useStyles = makeStyles({
+  plot:{
+    width: "100%", 
+    height: "100%"
+  },
+  historicalCard:{
+    height: "60vh"
+  }
+});
+
 const getMeasurements = (state: IState) => {
   return state.measurements;
 };
@@ -16,11 +26,8 @@ const getMeasurements = (state: IState) => {
 const layout:any = {
   autosize: true,
   margin: {
-  //  l: 20,
-  //  r: 50,
     b: 55,
     t: 35,
-  //  pad: 4
   },
   legend: {x: 0.4, y: 1.2, orientation: 'h'},
   xaxis: {
@@ -29,32 +36,23 @@ const layout:any = {
   }
 }
 
-//const PlotComponent = (props:any) => {
-//  return(<Plot
-//    data={props.data}
-//    layout={props.layout}
-//    useResizeHandler={true}
-//    style={{width: "100%", height: "100%"}}
-//  />)
-//}
-
 const Historical = ({selectedOption = [], initTime = Date.now(), options = []}) => {
   const measurements:any = useSelector(getMeasurements);
   const dispatch = useDispatch();
   const [result] = useQuery({
     query,
     variables: {
-      //input: selectedOption ? selectedOption.map((metric:any) => ({metricName: metric.value, after: initTime})) : [],
       input: options ? options.map((metric:any) => ({metricName: metric.value, after: initTime})) : [],
     },
   });
   const { data, error } = result;
   const [dynamicLayout, setDynamicLayout] = useState({});
   const [units, setUnits] = useState([]);
+  const classes:any = useStyles();
 
   useEffect(() => {
     if (error) {
-      dispatch(actions.historicalApiErrorReceived({ error: error.message }));
+      dispatch(actions.apiErrorReceived({ error: error.message }));
       return;
     }
     if (!data) return;
@@ -128,9 +126,9 @@ const Historical = ({selectedOption = [], initTime = Date.now(), options = []}) 
 
   return (
     <div>
-      {selectedOption&&
-        selectedOption.length>0&&
-        <Card elevation={0} style={{height: "60vh"}}>
+      {selectedOption &&
+        selectedOption.length>0 &&
+        <Card elevation={0} className={classes.historicalCard}>
         <Plot data={selectedOption.map((measurement:any) => {
             return (measurement.value in measurements) ?
             { x: measurements[measurement.value].x, 
@@ -142,7 +140,7 @@ const Historical = ({selectedOption = [], initTime = Date.now(), options = []}) 
           })} 
           layout={dynamicLayout}     
           useResizeHandler={true}
-          style={{width: "100%", height: "100%"}}
+          className={classes.plot}
         />
         </Card>
       }  

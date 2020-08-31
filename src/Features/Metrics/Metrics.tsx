@@ -65,7 +65,7 @@ const Metric = ({selectedOption = []}) => {
               {
                 measurement.value in measurements ?
                 measurements[measurement.value].last.value + "" + measurements[measurement.value].unit :
-                <CircularProgress/>
+                <CircularProgress />
               }
             </Typography>
           </CardContent>
