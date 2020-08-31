@@ -128,21 +128,21 @@ const Historical = ({selectedOption = [], initTime = Date.now(), options = []}) 
     <div>
       {selectedOption &&
         selectedOption.length>0 &&
-        <Card elevation={0} className={classes.historicalCard}>
-        <Plot data={selectedOption.map((measurement:any) => {
-            return (measurement.value in measurements) ?
-            { x: measurements[measurement.value].x, 
-              y: measurements[measurement.value].y, 
-              yaxis: chooseYaxis(measurements[measurement.value].unit),
-              type: 'scatter', 
-              name: `${measurement.value} ${measurements[measurement.value].unit}`
-            } : {}
-          })} 
-          layout={dynamicLayout}     
-          useResizeHandler={true}
-          className={classes.plot}
-        />
-        </Card>
+          <Card elevation={0} className={classes.historicalCard}>
+          <Plot data={selectedOption.map((measurement:any) => {
+              return (measurement.value in measurements) ?
+              { x: measurements[measurement.value].x, 
+                y: measurements[measurement.value].y, 
+                yaxis: chooseYaxis(measurements[measurement.value].unit),
+                type: 'scatter', 
+                name: `${measurement.value} ${measurements[measurement.value].unit}`
+              } : {}
+            })} 
+            layout={dynamicLayout}     
+            useResizeHandler={true}
+            className={classes.plot}
+          />
+          </Card>
       }  
     </div>
   );

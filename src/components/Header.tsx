@@ -18,7 +18,7 @@ export default () => {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" color="inherit" className={classes.grow}>
-          {"Dashboard"}
+          {"EOG Dashboard"}
         </Typography>
         <Weather />
       </Toolbar>
