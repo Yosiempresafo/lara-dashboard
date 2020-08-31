@@ -25,23 +25,25 @@ const Dashboard = () => {
       return;
     }
     if (!data) return;
-    setOptions(data.getMetrics.map((metric:any) => ({value: metric, label: metric, unit: metric.includes('Temp')?'°F':metric.includes('Pressure')?'PSI':'%'})));
+    setOptions(data.getMetrics.map((metric:any) => ({
+      value: metric, label: metric, unit: metric.includes('Temp')?'°F':metric.includes('Pressure')?'PSI':'%'
+    })));
   }, [data, error]);
 
   if (fetching) return <LinearProgress />;
 
   return (
     <Container maxWidth="xl">
-        <Select
-          defaultValue={selectedOption}
-          onChange={setSelectedOption}
-          isMulti
-          options={options}
-          className="basic-multi-select"
-          classNamePrefix="select"
-        />
-        <Metrics selectedOption={selectedOption} />
-        <Historical selectedOption={selectedOption} initTime={initTime} options={options}/>
+      <Select
+        defaultValue={selectedOption}
+        onChange={setSelectedOption}
+        isMulti
+        options={options}
+        className="basic-multi-select"
+        classNamePrefix="select"
+      />
+      <Metrics selectedOption={selectedOption} />
+      <Historical selectedOption={selectedOption} initTime={initTime} options={options}/>
     </Container>
   );
 };
