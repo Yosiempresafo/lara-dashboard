@@ -48,8 +48,7 @@ const Weather = () => {
   }, [dispatch, data, error]);
 
   if (fetching) return <LinearProgress />;
-
-  return <Chip label={`Weather in ${locationName}: ${description} and ${temperatureinFahrenheit}°`}/>;
+  return <Chip label={`Weather in ${locationName}: ${description} ${temperatureinFahrenheit.toFixed(2)}°`}/>;
 };
 
 export default () => {
